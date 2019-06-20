@@ -55,24 +55,33 @@ namespace LawXPDF
 
             Document doc = new Document();
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = "C:\\Users";
+            dialog.InitialDirectory = strPath;
             dialog.IsFolderPicker = true;
+
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
               //  MessageBox.Show("Wybrany folder: " + dialog.FileName);
             }
+
             PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream(fileName, FileMode.Create));
 
             doc.Open();
 
+            PdfPTable table = new PdfPTable(1);
+            table.WidthPercentage = 100;
 
             string supportedExtensions = "*.jpg,*.gif,*.png,*.bmp,*.jpe,*.jpeg";
             foreach (string file in Directory.GetFiles(dialog.FileName, "*.*", SearchOption.AllDirectories).Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower())))
             {
                 var image = iTextSharp.text.Image.GetInstance(file);
-                doc.Add(image);
+
+                PdfPCell cell = new PdfPCell(image, true);
+                cell.Border = iTextSharp.text.Rectangle.TOP_BORDER;
+                table.AddCell(cell);
 
             }
+
+            doc.Add(table);
 
             doc.Close();
             MessageBox.Show("Plik PDF zapisany na pulpicie.");

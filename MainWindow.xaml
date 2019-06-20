@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LawXPDF"
         mc:Ignorable="d"
-        Title="LawXPDF" Height="283.243" Width="520.436">
+        Title="LawXPDF" Height="283.243" Width="520.436" Icon="iconfinder_law_298810.ico">
     <Grid Margin="0,0,2,-1">
         <Button x:Name="button" Content="Wybierz folder " HorizontalAlignment="Left" Margin="250,110,0,0" VerticalAlignment="Top" Width="134" Height="46" Click="generatePDF"/>
-        <Button x:Name="button1" Content="Debug" HorizontalAlignment="Left" Margin="30,136,0,0" VerticalAlignment="Top" Width="75" Click="debugExit"/>
+        <Button x:Name="button1" Content="Debug" HorizontalAlignment="Left" Margin="30,136,0,0" VerticalAlignment="Top" Width="75" Click="debugExit" Visibility="Hidden"/>
 
     </Grid>
 </Window>

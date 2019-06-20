@@ -13,9 +13,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 using iTextSharp;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using NUnit;
 
 namespace LawXPDF
@@ -29,23 +31,51 @@ namespace LawXPDF
         {
             InitializeComponent();
 
-            FileStream fs = new FileStream("Chapter1_Example1.pdf", FileMode.Create, FileAccess.Write, FileShare.None);
+           
+            
+
+            
+
+        }
+
+        private void debugExit(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+
+
+
+        private void generatePDF(object sender, RoutedEventArgs e)
+        {
+
+            string strPath = Environment.GetFolderPath(
+            System.Environment.SpecialFolder.DesktopDirectory);
+
+            String fileName = strPath + "/Zdjęcia_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
+
             Document doc = new Document();
-            PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.InitialDirectory = "C:\\Users";
+            dialog.IsFolderPicker = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+              //  MessageBox.Show("Wybrany folder: " + dialog.FileName);
+            }
+            PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream(fileName, FileMode.Create));
+
             doc.Open();
 
 
-
-            string filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            DirectoryInfo d = new DirectoryInfo(filepath);
-
-            foreach (var file in Directory.GetFiles(filepath, "*.jpg"))
+            string supportedExtensions = "*.jpg,*.gif,*.png,*.bmp,*.jpe,*.jpeg";
+            foreach (string file in Directory.GetFiles(dialog.FileName, "*.*", SearchOption.AllDirectories).Where(s => supportedExtensions.Contains(System.IO.Path.GetExtension(s).ToLower())))
             {
                 var image = iTextSharp.text.Image.GetInstance(file);
                 doc.Add(image);
-            }
-            doc.Close();
 
+            }
+
+            doc.Close();
+            MessageBox.Show("Plik PDF zapisany na pulpicie.");
         }
     }
 }
